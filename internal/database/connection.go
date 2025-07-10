@@ -1,17 +1,18 @@
 package database
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
-	"time"
+
+	"gorm.io/driver/mysql"
 
 	_ "github.com/go-sql-driver/mysql" // MySQL driver
 	"github.com/lasamarndi1994/gov2/internal/config"
+	"gorm.io/gorm"
 )
 
 // DBClient represents our database connection pool
-var DB *sql.DB
+var DB *gorm.DB
 
 // InitDB initializes the database connection pool
 func InitDB(cfg *config.Config) {
@@ -22,39 +23,33 @@ func InitDB(cfg *config.Config) {
 	fmt.Println("Attempting to connect to database:", cfg.DBName)
 
 	var err error
-	DB, err = sql.Open("mysql", dsn)
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	//DB, err = sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatalf("Error opening database connection: %v", err)
 	}
+	//err = db.AutoMigrate(&models.User{})
 
-	// Configure connection pool
-	DB.SetMaxOpenConns(100)                // Max 100 open connections
-	DB.SetMaxIdleConns(25)                 // Max 25 idle connections
-	DB.SetConnMaxLifetime(5 * time.Minute) // Connections will be reused for at most 5 minutes
-	DB.SetConnMaxIdleTime(1 * time.Minute) // Connections idle for 1 minute will be closed
-
-	// Ping the database to verify the connection
-	err = DB.Ping()
 	if err != nil {
-		log.Fatalf("Error connecting to the database: %v", err)
+		log.Fatal("Migration error:", err)
 	}
+	DB = db
+	// Ping the database to verify the connection
 
 	fmt.Println("Successfully connected to MySQL database!")
 }
 
 // CloseDB closes the database connection pool
 func CloseDB() {
-	if DB != nil {
-		err := DB.Close()
+	sqlDB, _ := DB.DB() // Get *sql.DB from GORM
+
+	if sqlDB != nil {
+		err := sqlDB.Close()
 		if err != nil {
 			log.Printf("Error closing database connection: %v", err)
 		} else {
 			fmt.Println("Database connection closed.")
 		}
 	}
-}
-
-// GetDB returns the initialized database connection pool
-func GetDB() *sql.DB {
-	return DB
 }
