@@ -16,6 +16,7 @@ func SetupRouter() *gin.Engine {
 		c.String(http.StatusOK, "pong")
 	})
 	api.POST("/login", handler.HandleLogin)
+	api.POST("/register", handler.HandleRegister)
 
 	// auth := r.Group("/api", AuthMiddleware())
 	// auth.GET("/dashboard", dashboardHandler)

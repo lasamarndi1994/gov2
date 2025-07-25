@@ -11,13 +11,13 @@ import (
 
 // Config holds all application configuration settings
 type Config struct {
-	DBUser     string
-	DBPassword string
-	DBHost     string
-	DBPort     string
-	DBName     string
-	JWTSecret  string
-	AppPort    string
+	DBUser       string
+	DBPassword   string
+	DBHost       string
+	DBPort       string
+	DBName       string
+	JWTSecretKey string
+	AppPort      string
 	// Add any other configuration variables here
 }
 
@@ -29,18 +29,18 @@ func LoadConfig() *Config {
 	}
 
 	cfg := &Config{
-		DBUser:     os.Getenv("DB_USER"),
-		DBPassword: os.Getenv("DB_PASSWORD"),
-		DBHost:     os.Getenv("DB_HOST"),
-		DBPort:     os.Getenv("DB_PORT"),
-		DBName:     os.Getenv("DB_NAME"),
-		JWTSecret:  os.Getenv("JWT_SECRET"),
-		AppPort:    os.Getenv("APP_PORT"),
+		DBUser:       os.Getenv("DB_USER"),
+		DBPassword:   os.Getenv("DB_PASSWORD"),
+		DBHost:       os.Getenv("DB_HOST"),
+		DBPort:       os.Getenv("DB_PORT"),
+		DBName:       os.Getenv("DB_NAME"),
+		JWTSecretKey: os.Getenv("JWT_SECRET_KEY"),
+		AppPort:      os.Getenv("APP_PORT"),
 	}
 
 	// Basic validation for critical config (you can add more comprehensive checks)
 	if cfg.DBUser == "" || cfg.DBHost == "" ||
-		cfg.DBPort == "" || cfg.DBName == "" || cfg.JWTSecret == "" ||
+		cfg.DBPort == "" || cfg.DBName == "" || cfg.JWTSecretKey == "" ||
 		cfg.AppPort == "" {
 		log.Fatal("One or more critical environment variables are missing. Please check your .env file.")
 	}

@@ -1,6 +1,7 @@
 package validation
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
@@ -11,7 +12,8 @@ func FormatValidationError(err error) map[string]string {
 
 	if ve, ok := err.(validator.ValidationErrors); ok {
 		for _, fe := range ve {
-			field := strings.ToLower(fe.Field()) // field name like 'email'
+			//field := strings.ToLower(fe.Field()) // field name like 'email'
+			field := toSnakeCase(fe.Field()) // field name like 'email'
 			switch fe.Tag() {
 			case "required":
 				errors[field] = field + " is required"
@@ -28,4 +30,8 @@ func FormatValidationError(err error) map[string]string {
 	}
 
 	return errors
+}
+func toSnakeCase(str string) string {
+	snake := regexp.MustCompile("([a-z0-9])([A-Z])").ReplaceAllString(str, "${1}_${2}")
+	return strings.ToLower(snake)
 }
