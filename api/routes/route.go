@@ -7,19 +7,16 @@ import (
 	"github.com/lasamarndi1994/gov2/api/handler"
 )
 
-var db = make(map[string]string)
-
 func SetupRouter() *gin.Engine {
-	// Disable Console Color
-	// gin.DisableConsoleColor()
 	router := gin.Default()
 
-	// Ping test
-	router.GET("/api/ping", func(c *gin.Context) {
+	api := router.Group("/api")
+
+	api.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})
+	api.POST("/login", handler.HandleLogin)
 
-	router.POST("/api/login", handler.HandleLogin)
 	// auth := r.Group("/api", AuthMiddleware())
 	// auth.GET("/dashboard", dashboardHandler)
 
