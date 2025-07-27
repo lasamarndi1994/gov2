@@ -21,11 +21,10 @@ import (
 
 var cfg = config.LoadConfig()
 var jwtSecret = []byte(cfg.JWTSecretKey)
-var user models.User
 
 func HandleLogin(c *gin.Context) {
 	var input request.LoginReuest
-
+	var user models.User
 	if err := c.ShouldBindJSON(&input); err != nil {
 		// Validation errors
 		errs := validation.FormatValidationError(err)
@@ -39,16 +38,12 @@ func HandleLogin(c *gin.Context) {
 	//check email
 
 	if err := database.DB.Where("email = ?", input.Email).First(&user).Error; err != nil {
-
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"status":  false,
-			"message": "The user is not register",
-		})
+		c.JSON(http.StatusUnauthorized, response.ErrorMessage("email", "Email is not register"))
 		return
 	}
 	//check password
-	if user.Password != input.Password {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect password"})
+	if !helper.CheckPassword(user.Password, input.Password) {
+		c.JSON(http.StatusUnauthorized, response.ErrorMessage("password", "Enter password is invalid"))
 		return
 	}
 
@@ -85,12 +80,7 @@ func HandleRegister(c *gin.Context) {
 	isUnique, field := isEmailOrMobileExists(input.Email, input.MobileNumber)
 
 	if isUnique {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"status": false,
-			"error": map[string]string{
-				field: field + " already exists",
-			}, // convert error to string
-		})
+		c.JSON(http.StatusUnauthorized, response.ErrorMessage(field, field+" is already register"))
 		return
 	}
 
@@ -138,19 +128,39 @@ func HandleForgotPassword(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response.ErrorMessage("email", "Email is not present"))
 		return
 	}
-	c.JSON(http.StatusOK, response.SuccessMessage("User registered successfully"))
+	token := helper.GenerateToken(64)
+
+	resetPassword := models.PasswordReset{
+		UserID:    user.Id,
+		Token:     token,
+		ExpiresAt: time.Now().Add(1 * time.Hour),
+	}
+
+	result := database.DB.Create(&resetPassword) // insert data
+
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": false,
+			"error":  result.Error.Error(), // convert error to string
+		})
+		return
+	}
 
 	go mail.SendHTMLEmail(user.Email, "Welcome !", mail.EmailData{
-		Name:  user.FirstName,
-		Email: user.Email,
+		Name:       user.FirstName,
+		Email:      user.Email,
+		ResetToken: "https://yourdomain.com/reset-password?token=" + token,
 	})
+
+	c.JSON(http.StatusOK, response.SuccessMessage("Sent a link to register email", &token))
+
 }
 
 func HandleResetPassword(c *gin.Context) {
 }
 
 func isEmailOrMobileExists(email string, mobile_number int) (bool, string) {
-	var user models.User // 🔥 local variable, not global
+	var user models.User //  local variable, not global
 	err := database.DB.Where("email = ? OR mobile_number =?", email, mobile_number).First(&user).Error
 
 	if err == nil {

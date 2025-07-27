@@ -18,6 +18,11 @@ type Config struct {
 	DBName       string
 	JWTSecretKey string
 	AppPort      string
+	MailMailer   string
+	MailHost     string
+	MailPort     string
+	MailUsername string
+	MailPassword string
 	// Add any other configuration variables here
 }
 
@@ -36,6 +41,11 @@ func LoadConfig() *Config {
 		DBName:       os.Getenv("DB_NAME"),
 		JWTSecretKey: os.Getenv("JWT_SECRET_KEY"),
 		AppPort:      os.Getenv("APP_PORT"),
+		MailMailer:   os.Getenv("MAIL_MAILER"),
+		MailHost:     os.Getenv("MAIL_HOST"),
+		MailPort:     os.Getenv("MAIL_PORT"),
+		MailUsername: os.Getenv("MAIL_USERNAME"),
+		MailPassword: os.Getenv("MAIL_PASSWORD"),
 	}
 
 	// Basic validation for critical config (you can add more comprehensive checks)

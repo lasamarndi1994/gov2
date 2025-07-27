@@ -19,8 +19,8 @@ type User struct {
 	MobileNumber int            `json:"mobile_number" gorm:"unique"`
 	Password     string         `json:"password" gorm:"not null;size:256"`
 	Status       string         `json:"status" gorm:"type:enum('Active','Pending','Approved','Deactive');default:'Pending';not null"`
-	JoiningDate  time.Time      `json:"joining_date" gorm:"type:date"`
-	DateofBirth  time.Time      `json:"dateof_birth" gorm:"type:date"`
+	JoiningDate  time.Time      `json:"joining_date" gorm:"type:date;default:null"`
+	DateofBirth  time.Time      `json:"dateof_birth" gorm:"type:date;default:null"`
 	AboutMe      string         `json:"about_me"`
 	CreatedAt    *time.Time     `json:"created_at"`
 	UpdatedAt    *time.Time     `json:"updated_at"`

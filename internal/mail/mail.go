@@ -3,14 +3,19 @@ package mail
 import (
 	"bytes"
 	"html/template"
+	"strconv"
 
+	"github.com/lasamarndi1994/gov2/internal/config"
 	"gopkg.in/gomail.v2"
 )
 
 type EmailData struct {
-	Name  string
-	Email string
+	Name       string
+	Email      string
+	ResetToken string
 }
+
+var cfg = config.LoadConfig()
 
 func SendHTMLEmail(to string, subject string, data EmailData) error {
 	// Parse HTML file
@@ -32,7 +37,8 @@ func SendHTMLEmail(to string, subject string, data EmailData) error {
 	m.SetBody("text/html", body.String())
 
 	// SMTP config
-	d := gomail.NewDialer("sandbox.smtp.mailtrap.io", 587, "90b2b0e2fcc82f", "8e1fa4ffabe213")
+	port, _ := strconv.Atoi(cfg.MailPort)
+	d := gomail.NewDialer(cfg.MailHost, port, cfg.MailUsername, cfg.MailPassword)
 
 	return d.DialAndSend(m)
 }

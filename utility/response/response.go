@@ -1,9 +1,12 @@
 package response
 
-func SuccessMessage(message string) map[string]interface{} {
+func SuccessMessage(message string, data *string) map[string]interface{} {
 	response := map[string]interface{}{}
 	response["status"] = true
 	response["message"] = message
+	if data != nil {
+		response["data"] = *data
+	}
 	return response
 
 }

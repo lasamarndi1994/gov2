@@ -18,8 +18,8 @@ var DB *gorm.DB
 // InitDB initializes the database connection pool
 func InitDB(cfg *config.Config) {
 	// Construct the DSN (Data Source Name)
-	dsn := fmt.Sprintf("%s:@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		cfg.DBUser, cfg.DBHost, cfg.DBPort, cfg.DBName)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		cfg.DBUser, cfg.DBPassword, cfg.DBHost, cfg.DBPort, cfg.DBName)
 
 	fmt.Println("Attempting to connect to database:", cfg.DBName)
 
@@ -30,7 +30,9 @@ func InitDB(cfg *config.Config) {
 	if err != nil {
 		log.Fatalf("Error opening database connection: %v", err)
 	}
-	err = db.AutoMigrate(&models.User{})
+	//migration
+	//err = db.AutoMigrate(&models.User{})
+	err = db.AutoMigrate(&models.PasswordReset{})
 
 	if err != nil {
 		log.Fatal("Migration error:", err)
