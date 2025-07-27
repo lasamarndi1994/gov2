@@ -7,6 +7,8 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+var Validate *validator.Validate
+
 func FormatValidationError(err error) map[string]string {
 	errors := map[string]string{}
 
@@ -19,6 +21,8 @@ func FormatValidationError(err error) map[string]string {
 				errors[field] = field + " is required"
 			case "email":
 				errors[field] = "Invalid email address"
+			case "unique_email":
+				errors[field] = "Email already exists"
 			case "gte":
 				errors[field] = field + " must be at least " + fe.Param()
 			case "lte":

@@ -1,24 +1,34 @@
 package models
 
 import (
+	"math/rand"
+	"strconv"
 	"time"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type User struct {
-	Id           uint   `json:"id" gorm:"unique;primaryKey;autoIncrement"`
-	UserId       string `json:"emp_id" gotm:"unique"`
-	FirstName    string `json:"first_name"`
-	LastName     string `json:"last_name"`
-	Email        string `json:"email" gorm:"unique"`
-	MobileNumber int    `json:"mobile_number" gorm:"unique"`
-	Password     string `json:"password"`
-	Status       string `json:"status"`
-	JoiningDate  string `json:"joining_date"`
-	DateofBirth  time.Time
-	AboutMe      *string `json:"about_me"`
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
-	DeletedAt    gorm.DeletedAt
+	Id           uint           `json:"id" gorm:"unique;primaryKey;autoIncrement"`
+	Uuid         uuid.UUID      `json:"uuid" gorm:"size:256;not nul;unique"`
+	UserId       string         `json:"emp_id" gorm:"unique;not null;uniqueIndex"`
+	FirstName    string         `json:"first_name" gorm:"size:256"`
+	LastName     string         `json:"last_name" gorm:"size:256;not null"`
+	Email        string         `json:"email" gorm:"unique;not null;unique;unique_email"`
+	MobileNumber int            `json:"mobile_number" gorm:"unique"`
+	Password     string         `json:"password" gorm:"not null;size:256"`
+	Status       string         `json:"status" gorm:"type:enum('Active','Pending','Approved','Deactive');default:'Pending';not null"`
+	JoiningDate  time.Time      `json:"joining_date" gorm:"type:date"`
+	DateofBirth  time.Time      `json:"dateof_birth" gorm:"type:date"`
+	AboutMe      string         `json:"about_me"`
+	CreatedAt    *time.Time     `json:"created_at"`
+	UpdatedAt    *time.Time     `json:"updated_at"`
+	DeletedAt    gorm.DeletedAt `json:"deleted_at"`
+}
+
+func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
+	u.Uuid = uuid.New() // NOT uuid.UUID{}
+	u.UserId = strconv.Itoa(100000 + rand.Intn(900000))
+	return
 }

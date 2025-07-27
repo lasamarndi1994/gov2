@@ -1,11 +1,5 @@
 package models
 
-import (
-	"time"
-
-	"gorm.io/gorm"
-)
-
 type BankInfo struct {
 	Id            uint `json:"id" gorm:"unique;autoIncrement;primaryKey"`
 	UserId        uint
@@ -14,7 +8,7 @@ type BankInfo struct {
 	IfscCode      string
 	Branch        string
 	DeletedBy     uint
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
-	DeletedAt     gorm.DeletedAt
+	// CreatedAt     time.Time
+	// UpdatedAt     time.Time
+	// DeletedAt     gorm.DeletedAt
 }

@@ -1,10 +1,5 @@
 package models
 
-import (
-	"encoding/json"
-	"time"
-)
-
 type Asset struct {
 	Id              uint `json:"id" gorm:"unique;autoIncrement;primaryKey"`
 	AssignedUser    uint32
@@ -14,6 +9,6 @@ type Asset struct {
 	SerialNumber    *string
 	ProductDetails  *string
 	ProductCost     uint32
-	AssetImage      *json.Encoder
-	AssignDate      *time.Time
+	//	AssetImage      *json.Encoder
+	//AssignDate      *time.Time
 }
