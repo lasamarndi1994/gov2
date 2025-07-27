@@ -152,7 +152,7 @@ func HandleForgotPassword(c *gin.Context) {
 		ResetToken: "https://yourdomain.com/reset-password?token=" + token,
 	})
 
-	c.JSON(http.StatusOK, response.SuccessMessage("Sent a link to register email", &token))
+	c.JSON(http.StatusOK, response.SuccessMessage("Sent a link to register email", nil))
 
 }
 
