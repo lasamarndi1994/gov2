@@ -18,7 +18,7 @@ func SetupRouter() *gin.Engine {
 	api.POST("/login", handler.HandleLogin)
 	api.POST("/register", handler.HandleRegister)
 	api.POST("/forgot-password", handler.HandleForgotPassword)
-	api.POST("/regest-password", handler.HandleResetPassword)
+	api.POST("/reset-password", handler.HandleResetPassword)
 
 	// auth := r.Group("/api", AuthMiddleware())
 	// auth.GET("/dashboard", dashboardHandler)

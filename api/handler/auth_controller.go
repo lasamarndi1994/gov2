@@ -157,6 +157,18 @@ func HandleForgotPassword(c *gin.Context) {
 }
 
 func HandleResetPassword(c *gin.Context) {
+
+	var input request.ResetPasswordRequest
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		request.InitValidator()
+		if errs := request.Validate.Struct(input); errs != nil {
+			errs := validation.FormatValidationError(errs)
+			c.JSON(http.StatusUnprocessableEntity, gin.H{"errors": errs})
+			return
+		}
+	}
+
 }
 
 func isEmailOrMobileExists(email string, mobile_number int) (bool, string) {

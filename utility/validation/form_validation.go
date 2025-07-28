@@ -7,8 +7,6 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-var Validate *validator.Validate
-
 func FormatValidationError(err error) map[string]string {
 	errors := map[string]string{}
 
@@ -27,6 +25,8 @@ func FormatValidationError(err error) map[string]string {
 				errors[field] = field + " must be at least " + fe.Param()
 			case "lte":
 				errors[field] = field + " must be at most " + fe.Param()
+			case "passwordmatch":
+				errors[field] = "Password and confirm password do not match"
 			default:
 				errors[field] = "invalid value for " + field
 			}
