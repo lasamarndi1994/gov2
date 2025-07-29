@@ -7,16 +7,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/lasamarndi1994/gov2/api/handler/request"
+	"github.com/lasamarndi1994/gov2/api/models"
 	"github.com/lasamarndi1994/gov2/helper"
 	"github.com/lasamarndi1994/gov2/internal/config"
 	"github.com/lasamarndi1994/gov2/internal/database"
 	"github.com/lasamarndi1994/gov2/internal/mail"
-	"github.com/lasamarndi1994/gov2/models"
-	"gorm.io/gorm"
-
+	"github.com/lasamarndi1994/gov2/internal/request"
 	"github.com/lasamarndi1994/gov2/utility/response"
 	"github.com/lasamarndi1994/gov2/utility/validation"
+	"gorm.io/gorm"
 )
 
 var cfg = config.LoadConfig()
@@ -131,7 +130,7 @@ func HandleForgotPassword(c *gin.Context) {
 	token := helper.GenerateToken(64)
 
 	resetPassword := models.PasswordReset{
-		UserID:    user.Id,
+		UserId:    user.Id,
 		Token:     token,
 		ExpiresAt: time.Now().Add(1 * time.Hour),
 	}
@@ -161,13 +160,28 @@ func HandleResetPassword(c *gin.Context) {
 	var input request.ResetPasswordRequest
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		request.InitValidator()
-		if errs := request.Validate.Struct(input); errs != nil {
-			errs := validation.FormatValidationError(errs)
-			c.JSON(http.StatusUnprocessableEntity, gin.H{"errors": errs})
-			return
-		}
+		errs := validation.FormatValidationError(err)
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"errors": errs})
+		return
 	}
+
+	request.InitValidator()
+	if errs := request.Validate.Struct(input); errs != nil {
+		errs := validation.FormatValidationError(errs)
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"errors": errs})
+		return
+	}
+	var resetPasword models.PasswordReset
+
+	result := database.DB.Where("token =? AND expires_at >?", input.Token, time.Now()).First(&resetPasword)
+	if result.Error != nil {
+		c.JSON(http.StatusOK, response.ErrorMessage("token", "The link is expire"))
+		return
+	}
+	database.DB.Where("token =? ", input.Token).Delete(&resetPasword)
+
+	database.DB.Where("id =? ", resetPasword.UserId).Updates(models.User{Password: input.Password})
+	c.JSON(http.StatusOK, response.SuccessMessage("Your password is successfully updated", nil))
 
 }
 

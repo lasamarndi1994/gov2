@@ -8,7 +8,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql" // MySQL driver
 	"github.com/lasamarndi1994/gov2/internal/config"
-	"github.com/lasamarndi1994/gov2/models"
+
 	"gorm.io/gorm"
 )
 
@@ -32,11 +32,12 @@ func InitDB(cfg *config.Config) {
 	}
 	//migration
 	//err = db.AutoMigrate(&models.User{})
-	err = db.AutoMigrate(&models.PasswordReset{})
+	//err = db.AutoMigrate(&models.PasswordReset{})
 
 	if err != nil {
 		log.Fatal("Migration error:", err)
 	}
+
 	DB = db
 	// Ping the database to verify the connection
 
