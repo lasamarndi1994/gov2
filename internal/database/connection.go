@@ -31,8 +31,8 @@ func InitDB(cfg *config.Config) {
 		log.Fatalf("Error opening database connection: %v", err)
 	}
 	//migration
-	//err = db.AutoMigrate(&models.User{})
-	//err = db.AutoMigrate(&models.PasswordReset{})
+
+	err = migration(db)
 
 	if err != nil {
 		log.Fatal("Migration error:", err)
@@ -56,4 +56,14 @@ func CloseDB() {
 			fmt.Println("Database connection closed.")
 		}
 	}
+}
+
+func migration(db *gorm.DB) error {
+	// db.AutoMigrate(&models.User{})
+	// db.AutoMigrate(&models.PasswordReset{})
+	// db.AutoMigrate(&models.Department{})
+	// db.AutoMigrate(&models.Designation{})
+	// db.AutoMigrate(&models.UserDepartment{})
+	// db.AutoMigrate(&models.UserDesignation{})
+	return nil
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/lasamarndi1994/gov2/api/handler"
+	"github.com/lasamarndi1994/gov2/api/middleware"
 )
 
 func SetupRouter() *gin.Engine {
@@ -19,10 +20,12 @@ func SetupRouter() *gin.Engine {
 	api.POST("/register", handler.HandleRegister)
 	api.POST("/forgot-password", handler.HandleForgotPassword)
 	api.POST("/reset-password", handler.HandleResetPassword)
-	api.GET("/users", handler.GetUserDetails)
 
-	// auth := r.Group("/api", AuthMiddleware())
-	// auth.GET("/dashboard", dashboardHandler)
+	//auth := api.Group("/", middleware.AuthMiddleware)
 
+	api.Use(middleware.AuthMiddleware)
+	{
+		api.GET("/users", handler.GetUserDetails)
+	}
 	return router
 }
