@@ -27,18 +27,28 @@ func CreateDepartment(c *gin.Context) {
 			c.JSON(http.StatusUnprocessableEntity, gin.H{"erros": errs})
 		}
 	}
+	//var department models.Department
 	department := models.Department{
 		Name:   input.Name,
 		Status: input.Status,
 	}
+	//var count int64
+	//database.DB.Model(&department).Where("email = ?", "example@example.com").Count(&count)
 
-	result := database.DB.Create(&department)
-	if result.Error != nil {
-		c.JSON(http.StatusBadRequest, response.ErrorMessage("name", result.Error.Error()))
+	ok := validation.UniqueValidation(&department, "name", input.Name)
+	if ok {
+		result := database.DB.Create(&department)
+		if result.Error != nil {
+			c.JSON(http.StatusBadRequest, response.ErrorMessage("name", result.Error.Error()))
+			return
+		}
+
+		c.JSON(http.StatusAccepted, response.ResponseData("Success", department))
 		return
+	} else {
+		c.JSON(http.StatusAccepted, response.ResponseData("Failed", "Exist"))
 	}
 
-	c.JSON(http.StatusAccepted, response.ResponseData("Success", department))
 }
 func ShowDepartment(c *gin.Context) {
 }
