@@ -25,7 +25,10 @@ func SetupRouter() *gin.Engine {
 
 	api.Use(middleware.AuthMiddleware)
 	{
-		api.GET("/users", handler.GetUserDetails)
+		api.GET("/employees", handler.GetUserDetails)
+		api.POST("/create-employee", handler.CreateEmployee)
+
+		api.POST("/create-department", handler.CreateDepartment)
 	}
 	return router
 }
