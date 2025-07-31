@@ -16,6 +16,9 @@ type DepartmentRequest struct {
 }
 
 func GetDepartments(c *gin.Context) {
+	var departments []models.Department
+	database.DB.Order("id desc").Find(&departments)
+	c.JSON(http.StatusOK, response.SuccessResponse(departments))
 }
 
 func CreateDepartment(c *gin.Context) {
@@ -27,13 +30,10 @@ func CreateDepartment(c *gin.Context) {
 			c.JSON(http.StatusUnprocessableEntity, gin.H{"erros": errs})
 		}
 	}
-	//var department models.Department
 	department := models.Department{
 		Name:   input.Name,
 		Status: input.Status,
 	}
-	//var count int64
-	//database.DB.Model(&department).Where("email = ?", "example@example.com").Count(&count)
 
 	ok := validation.UniqueValidation(&department, "name", input.Name)
 	if ok {
@@ -42,13 +42,11 @@ func CreateDepartment(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, response.ErrorMessage("name", result.Error.Error()))
 			return
 		}
-
-		c.JSON(http.StatusAccepted, response.ResponseData("Success", department))
+		c.JSON(http.StatusCreated, response.SuccessResponse(department))
 		return
 	} else {
-		c.JSON(http.StatusAccepted, response.ResponseData("Failed", "Exist"))
+		c.JSON(http.StatusUnprocessableEntity, response.ErrorMessage("name", "The name already taken"))
 	}
-
 }
 func ShowDepartment(c *gin.Context) {
 }

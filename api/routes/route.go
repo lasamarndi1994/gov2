@@ -28,7 +28,9 @@ func SetupRouter() *gin.Engine {
 		api.GET("/employees", handler.GetUserDetails)
 		api.POST("/create-employee", handler.CreateEmployee)
 
+		api.GET("/departments", handler.GetDepartments)
 		api.POST("/create-department", handler.CreateDepartment)
+
 	}
 	return router
 }

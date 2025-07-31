@@ -1,5 +1,16 @@
 package response
 
+type ResponseDataStruct struct {
+	Status  bool         `json:"status"`
+	Message string       `json:"message"`
+	Data    *interface{} `json:"data"`
+}
+type ErrorMessageStruct struct {
+	Status  bool              `json:"status"`
+	Message string            `json:"message"`
+	Errors  map[string]string `json:"errors"`
+}
+
 func SuccessMessage(message string, data *string) map[string]interface{} {
 	response := map[string]interface{}{}
 	response["status"] = true
@@ -20,14 +31,25 @@ func ResponseData(message string, data interface{}) map[string]interface{} {
 	return response
 }
 
-func ErrorMessage(filed string, message string) map[string]interface{} {
-	response := map[string]interface{}{}
+func ErrorMessage(filed string, message string) interface{} {
 
-	response["status"] = false
-	response["errors"] = map[string]string{
+	//errors := map[string]interface{}{}
+	var errors = map[string]string{
 		filed: message,
 	}
-
+	var response = ErrorMessageStruct{
+		Status:  false,
+		Message: "Failed",
+		Errors:  errors,
+	}
 	return response
+}
 
+func SuccessResponse(data interface{}) interface{} {
+	var response = ResponseDataStruct{
+		Status:  true,
+		Message: "Success",
+		Data:    &data,
+	}
+	return response
 }
