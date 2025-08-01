@@ -30,6 +30,8 @@ func SetupRouter() *gin.Engine {
 
 		api.GET("/departments", handler.GetDepartments)
 		api.POST("/create-department", handler.CreateDepartment)
+		api.PUT("/department/:id", handler.UpdateDepartment)
+		api.DELETE("department/:id", handler.DeleteDepartment)
 
 	}
 	return router

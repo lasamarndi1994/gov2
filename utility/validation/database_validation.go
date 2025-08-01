@@ -13,3 +13,10 @@ func UniqueValidation(model interface{}, filed string, input string) bool {
 		return false
 	}
 }
+
+// func NotFoundValidation(model interface{}, filed string, input string) error {
+// 	if err := database.DB.Model(&model).Where(filed+" =?", input).Error; err != nil {
+// 		return err
+// 	}
+// 	return
+// }
