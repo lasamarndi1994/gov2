@@ -14,9 +14,9 @@ func UniqueValidation(model interface{}, filed string, input string) bool {
 	}
 }
 
-// func NotFoundValidation(model interface{}, filed string, input string) error {
-// 	if err := database.DB.Model(&model).Where(filed+" =?", input).Error; err != nil {
-// 		return err
-// 	}
-// 	return
-// }
+func NotFoundValidation(model interface{}, id string) error {
+	if err := database.DB.First(&model, id).Error; err != nil {
+		return err
+	}
+	return nil
+}

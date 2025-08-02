@@ -11,13 +11,11 @@ type ErrorMessageStruct struct {
 	Errors  map[string]string `json:"errors"`
 }
 
-func SuccessMessage(message string, data *string) map[string]interface{} {
+func SuccessMessage(message string) map[string]interface{} {
 	response := map[string]interface{}{}
 	response["status"] = true
 	response["message"] = message
-	if data != nil {
-		response["data"] = *data
-	}
+
 	return response
 }
 

@@ -151,7 +151,7 @@ func HandleForgotPassword(c *gin.Context) {
 		ResetToken: "https://yourdomain.com/reset-password?token=" + token,
 	})
 
-	c.JSON(http.StatusOK, response.SuccessMessage("Sent a link to register email", nil))
+	c.JSON(http.StatusOK, response.SuccessMessage("Sent a link to register email"))
 
 }
 
@@ -181,7 +181,7 @@ func HandleResetPassword(c *gin.Context) {
 	database.DB.Where("token =? ", input.Token).Delete(&resetPasword)
 
 	database.DB.Where("id =? ", resetPasword.UserId).Updates(models.User{Password: input.Password})
-	c.JSON(http.StatusOK, response.SuccessMessage("Your password is successfully updated", nil))
+	c.JSON(http.StatusOK, response.SuccessMessage("Your password is successfully updated"))
 
 }
 

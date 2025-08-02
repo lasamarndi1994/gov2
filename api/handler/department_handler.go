@@ -51,15 +51,12 @@ func CreateDepartment(c *gin.Context) {
 func UpdateDepartment(c *gin.Context) {
 	id := c.Param("id")
 	var department models.Department
+
 	if err := database.DB.First(&department, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, response.ErrorMessage("message", "Data not found"))
 		return
 	}
-	// ok := validation.UniqueValidation(&department, "id", id)
-	// if !ok {
-	// 	c.JSON(http.StatusNotFound, response.ErrorMessage("message", "Data not found"))
-	// 	return
-	// }
+
 	var input DepartmentRequest
 	if err := c.ShouldBindBodyWithJSON(&input); err != nil {
 		errs := validation.FormatValidationError(err)
@@ -73,7 +70,6 @@ func UpdateDepartment(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response.ErrorMessage("name", "The name is alreay taken"))
 		return
 	}
-
 	c.JSON(http.StatusOK, response.SuccessResponse(department))
 }
 func ShowDepartment(c *gin.Context) {
@@ -81,4 +77,17 @@ func ShowDepartment(c *gin.Context) {
 
 func DeleteDepartment(c *gin.Context) {
 
+	var id = c.Param("id")
+	var department models.Department
+
+	if err := database.DB.First(&department, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, response.ErrorMessage("message", "Data not found"))
+		return
+	}
+	if err := database.DB.Delete(&department).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"errors": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, response.SuccessMessage("Successfully Deleted"))
 }
