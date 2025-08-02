@@ -73,6 +73,15 @@ func UpdateDepartment(c *gin.Context) {
 	c.JSON(http.StatusOK, response.SuccessResponse(department))
 }
 func ShowDepartment(c *gin.Context) {
+	var id = c.Param("id")
+	var department models.Department
+	if err := database.DB.First(&department, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, response.ErrorMessage("message", "Data not found"))
+		return
+	}
+
+	c.JSON(http.StatusOK, response.SuccessResponse(department))
+
 }
 
 func DeleteDepartment(c *gin.Context) {
