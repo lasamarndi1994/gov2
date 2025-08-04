@@ -34,19 +34,13 @@ func CreateDesignation(c *gin.Context) {
 		Name:   input.Name,
 		Status: input.Status,
 	}
-
-	// ok := validation.UniqueValidation(&Designation, "name", input.Name)
-	// if ok {
-	result := database.DB.Create(&Designation)
-	if result.Error != nil {
-		c.JSON(http.StatusBadRequest, result.Error.Error())
+	err := database.DB.Create(&Designation).Error
+	if err != nil {
+		c.JSON(http.StatusBadRequest, validation.DataBaseValidationError(err))
 		return
 	}
 	c.JSON(http.StatusCreated, response.SuccessResponse(Designation))
-	//return
-	// } else {
-	// 	c.JSON(http.StatusUnprocessableEntity, response.ErrorMessage("name", "The name already taken"))
-	// }
+
 }
 func UpdateDesignation(c *gin.Context) {
 	id := c.Param("id")

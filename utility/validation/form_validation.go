@@ -7,6 +7,12 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+type FieldErrorResponse struct {
+	Status  bool              `json:"status"`
+	Message string            `json:"message"`
+	Error   map[string]string `json:"errors"`
+}
+
 func FormatValidationError(err error) map[string]string {
 	errors := map[string]string{}
 
@@ -76,12 +82,6 @@ func toSnakeCase(str string) string {
 	return strings.ToLower(snake)
 }
 
-type FieldErrorResponse struct {
-	Status  bool              `json:"status"`
-	Message string            `json:"message"`
-	Error   map[string]string `json:"errors"`
-}
-
 func DataBaseValidationError(err error) *FieldErrorResponse {
 
 	if err == nil || !strings.Contains(err.Error(), "Duplicate entry") {
@@ -120,7 +120,7 @@ func DataBaseValidationError(err error) *FieldErrorResponse {
 		}
 	}
 	return &FieldErrorResponse{
-		Message: "unknown",
+		Message: err.Error(),
 		Error:   nil,
 		Status:  false,
 	}
