@@ -27,13 +27,14 @@ func SetupRouter() *gin.Engine {
 	{
 		api.GET("/employees", handler.GetUserDetails)
 		api.POST("/create-employee", handler.CreateEmployee)
-
+		//Department
 		api.GET("/departments", handler.GetDepartments)
-		api.POST("/create-department", handler.CreateDepartment)
+		api.POST("/department", handler.CreateDepartment)
 		api.GET("department/:id", handler.ShowDepartment)
 		api.PUT("/department/:id", handler.UpdateDepartment)
 		api.DELETE("department/:id", handler.DeleteDepartment)
 
+		//Designation
 		api.GET("/designations", handler.GetDesignations)
 		api.POST("/designation", handler.CreateDesignation)
 		api.GET("designation/:id", handler.ShowDesignation)

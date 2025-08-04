@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lasamarndi1994/gov2/api/models"
@@ -28,11 +29,33 @@ func CreateEmployee(c *gin.Context) {
 		})
 		return
 	}
+	joinngDate, _ := time.Parse("2006-01-02", input.JoiningDate)
+	dateofBirth, _ := time.Parse("2006-01-02", input.DateofBirth)
 
-	var user models.User
-	err := database.DB.Create(&user).Error
-	if err != nil {
-		//c.JSON(http.StatusBadGateway, response.ErrorMessage("Something went wrong"))
+	user := models.User{
+		FirstName:    input.FirstName,
+		LastName:     input.LastName,
+		Email:        input.Email,
+		MobileNumber: input.MobileNumber,
+		EmployeeId:   input.EmployeeId,
+		AboutMe:      input.AboutMe,
+		JoiningDate:  joinngDate,
+		DateofBirth:  dateofBirth,
+
+		UserDesignations: []models.UserDesignation{
+			{DesiginationId: input.DesignationId},
+		},
+
+		UserDepartments: []models.UserDepartment{
+			{DepartmentId: input.DepartmentId},
+		},
 	}
+	err := database.DB.Create(&user).Error
+
+	if err != nil {
+		c.JSON(http.StatusBadGateway, validation.DataBaseValidationError(err))
+		return
+	}
+
 	c.JSON(http.StatusOK, response.ResponseData("Success", user))
 }

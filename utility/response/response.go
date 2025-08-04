@@ -51,3 +51,18 @@ func SuccessResponse(data interface{}) interface{} {
 	}
 	return response
 }
+
+func DataBaseError(message string) interface{} {
+	// response := map[string]interface{}{}
+	// if strings.Contains(message, "Duplicate entry") {
+	// 	var filed string
+
+	// 	switch {
+	// 	case strings.Contains(message, "uni_users_email"):
+	// 		filed = "email"
+	// 	case strings.Contains(message, "uni_users_mobile_number"):
+	// 	}
+
+	// }
+	return message
+}

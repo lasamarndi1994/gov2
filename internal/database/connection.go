@@ -59,7 +59,7 @@ func CloseDB() {
 }
 
 func migration(db *gorm.DB) error {
-	// db.AutoMigrate(&models.User{})
+	//db.AutoMigrate(&models.User{})
 	// db.AutoMigrate(&models.PasswordReset{})
 	// db.AutoMigrate(&models.Department{})
 	// db.AutoMigrate(&models.Designation{})
