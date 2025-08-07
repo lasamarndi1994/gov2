@@ -20,11 +20,12 @@ type User struct {
 	JoiningDate      time.Time         `json:"joining_date" gorm:"type:date;default:null"`
 	DateofBirth      time.Time         `json:"dateof_birth" gorm:"type:date;default:null"`
 	AboutMe          string            `json:"about_me"`
+	UserDesignations []UserDesignation `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	UserDepartments  []UserDepartment  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	RosterShift      string            `json:"shift_time"`
 	CreatedAt        *time.Time        `json:"created_at"`
 	UpdatedAt        *time.Time        `json:"-"`
 	DeletedAt        gorm.DeletedAt    `json:"-"`
-	UserDesignations []UserDesignation `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	UserDepartments  []UserDepartment  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {

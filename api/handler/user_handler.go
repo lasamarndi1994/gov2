@@ -19,9 +19,7 @@ func GetUserDetails(c *gin.Context) {
 }
 
 func CreateEmployee(c *gin.Context) {
-
 	var input request.EmployeeRequest
-
 	if err := c.ShouldBindBodyWithJSON(&input); err != nil {
 		errs := validation.FormatValidationError(err)
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
@@ -41,21 +39,17 @@ func CreateEmployee(c *gin.Context) {
 		AboutMe:      input.AboutMe,
 		JoiningDate:  joinngDate,
 		DateofBirth:  dateofBirth,
-
 		UserDesignations: []models.UserDesignation{
 			{DesiginationId: input.DesignationId},
 		},
-
 		UserDepartments: []models.UserDepartment{
 			{DepartmentId: input.DepartmentId},
 		},
 	}
 	err := database.DB.Create(&user).Error
-
 	if err != nil {
 		c.JSON(http.StatusBadGateway, validation.DataBaseValidationError(err))
 		return
 	}
-
 	c.JSON(http.StatusOK, response.ResponseData("Success", user))
 }

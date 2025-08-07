@@ -41,6 +41,11 @@ func SetupRouter() *gin.Engine {
 		api.PUT("/designation/:id", handler.UpdateDesignation)
 		api.DELETE("designation/:id", handler.DeleteDesignation)
 
+		//attendance
+		api.GET("attendences", handler.GetAttendance)
+		api.POST("/attendance", handler.StoreAttendance)
+		api.PUT("/attendance", handler.UpdateAttendance)
+
 	}
 	return router
 }

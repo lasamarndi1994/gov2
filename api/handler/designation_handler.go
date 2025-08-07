@@ -79,10 +79,8 @@ func ShowDesignation(c *gin.Context) {
 }
 
 func DeleteDesignation(c *gin.Context) {
-
 	var id = c.Param("id")
 	var Designation models.Designation
-
 	if err := database.DB.First(&Designation, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, response.ErrorMessage("message", "Data not found"))
 		return
