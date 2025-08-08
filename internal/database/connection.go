@@ -65,5 +65,10 @@ func migration(db *gorm.DB) error {
 	// db.AutoMigrate(&models.Designation{})
 	// db.AutoMigrate(&models.UserDepartment{})
 	// db.AutoMigrate(&models.UserDesignation{})
+
+	//db.AutoMigrate(&models.UserDesignation{})
+
+	//database.DB.AutoMigrate(&models.User{}, &models.Post{})
+
 	return nil
 }
