@@ -42,5 +42,15 @@ func AuthMiddleware(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	// Extract claims
+	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		// Example: store user ID from token
+		userID := uint(claims["user_id"].(float64))
+		c.Set("userID", userID)
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
+		c.Abort()
+		return
+	}
 	c.Next()
 }

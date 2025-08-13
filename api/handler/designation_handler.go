@@ -40,7 +40,6 @@ func CreateDesignation(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, response.SuccessResponse(Designation))
-
 }
 func UpdateDesignation(c *gin.Context) {
 	id := c.Param("id")

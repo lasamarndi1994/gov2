@@ -48,8 +48,9 @@ func HandleLogin(c *gin.Context) {
 
 	// Generate JWT
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": user.Id,
-		"exp":     time.Now().Add(time.Hour * 3650).Unix(),
+		"user_id":    user.Id,
+		"user_email": user.Email,
+		"exp":        time.Now().Add(time.Hour * 3650).Unix(),
 	})
 
 	tokenString, err := token.SignedString(jwtSecret)

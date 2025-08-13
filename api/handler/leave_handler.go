@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lasamarndi1994/gov2/api/models"
@@ -19,19 +21,25 @@ func ApplyLeave(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"errors": errs})
 		return
 	}
-
+	userIDValue, _ := c.Get("userID")
+	form_date, _ := time.Parse("2006-01-02", input.FromDate)
+	to_date, _ := time.Parse("2006-01-02", input.ToDate)
+	emailJSON, _ := json.Marshal(input.EmailNotification)
 	var leave = models.Leave{
-		LeaveTypeId:       input.LeaveTypeId,
-		FromDate:          input.FromDate,
-		ToDate:            input.ToDate,
-		FromLeaveValue:    input.FromLeaveValue,
-		ToLeaveValue:      input.ToLeaveValue,
-		Remarks:           input.Remarks,
-		EmailNotification: input.EmailNotification,
+		LeaveTypeId:    input.LeaveTypeId,
+		UserId:         userIDValue.(uint),
+		FromDate:       form_date,
+		ToDate:         to_date,
+		FromLeaveValue: input.FromLeaveValue,
+		ToLeaveValue:   input.ToLeaveValue,
+		Remarks:        input.Remarks,
+		//EmailNotification: json.Decoder(input.EmailNotification),
+		//	EmailNotification: []bytes emailJSON
 	}
 
 	err := database.DB.Create(&leave).Error
 	if err != nil {
+		//c.JSON(http.StatusUnprocessableEntity, gin.H{"errors": err.Error()})
 		c.JSON(http.StatusBadRequest, validation.DataBaseValidationError(err))
 		return
 	}
@@ -39,6 +47,7 @@ func ApplyLeave(c *gin.Context) {
 }
 
 func UpdateLeave(c *gin.Context) {
+
 }
 
 func DeleteLeave(c *gin.Context) {

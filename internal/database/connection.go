@@ -7,6 +7,7 @@ import (
 	"gorm.io/driver/mysql"
 
 	_ "github.com/go-sql-driver/mysql" // MySQL driver
+	"github.com/lasamarndi1994/gov2/api/models"
 	"github.com/lasamarndi1994/gov2/internal/config"
 
 	"gorm.io/gorm"
@@ -66,7 +67,7 @@ func migration(db *gorm.DB) error {
 	// db.AutoMigrate(&models.UserDepartment{})
 	// db.AutoMigrate(&models.UserDesignation{})
 
-	//db.AutoMigrate(&models.LevaeType{})
+	db.AutoMigrate(&models.Leave{})
 
 	//database.DB.AutoMigrate(&models.User{}, &models.Post{})
 
