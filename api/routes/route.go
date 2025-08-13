@@ -46,6 +46,11 @@ func SetupRouter() *gin.Engine {
 		api.POST("/attendance", handler.StoreAttendance)
 		api.PUT("/attendance", handler.UpdateAttendance)
 
+		//Leave
+		api.POST("/create-leave-type", handler.CreateLeave)
+
+		api.POST("/apply-leave", handler.ApplyLeave)
+
 	}
 	return router
 }

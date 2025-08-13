@@ -23,7 +23,6 @@ func GetDepartments(c *gin.Context) {
 
 func CreateDepartment(c *gin.Context) {
 	var input DepartmentRequest
-
 	if err := c.ShouldBindBodyWithJSON(&input); err != nil {
 		errs := validation.FormatValidationError(err)
 		if errs != nil {
@@ -34,19 +33,12 @@ func CreateDepartment(c *gin.Context) {
 		Name:   input.Name,
 		Status: input.Status,
 	}
-
-	ok := validation.UniqueValidation(&department, "name", input.Name)
-	if ok {
-		result := database.DB.Create(&department)
-		if result.Error != nil {
-			c.JSON(http.StatusBadRequest, response.ErrorMessage("name", result.Error.Error()))
-			return
-		}
-		c.JSON(http.StatusCreated, response.SuccessResponse(department))
+	err := database.DB.Create(&department).Error
+	if err != nil {
+		c.JSON(http.StatusBadRequest, validation.DataBaseValidationError(err))
 		return
-	} else {
-		c.JSON(http.StatusUnprocessableEntity, response.ErrorMessage("name", "The name already taken"))
 	}
+	c.JSON(http.StatusCreated, response.SuccessResponse(department))
 }
 func UpdateDepartment(c *gin.Context) {
 	id := c.Param("id")
@@ -56,7 +48,6 @@ func UpdateDepartment(c *gin.Context) {
 		c.JSON(http.StatusNotFound, response.ErrorMessage("message", "Data not found"))
 		return
 	}
-
 	var input DepartmentRequest
 	if err := c.ShouldBindBodyWithJSON(&input); err != nil {
 		errs := validation.FormatValidationError(err)
@@ -65,7 +56,6 @@ func UpdateDepartment(c *gin.Context) {
 	}
 	department.Name = input.Name
 	department.Status = input.Status
-
 	if err := database.DB.Save(&department).Error; err != nil {
 		c.JSON(http.StatusBadRequest, response.ErrorMessage("name", "The name is alreay taken"))
 		return

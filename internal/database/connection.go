@@ -66,7 +66,7 @@ func migration(db *gorm.DB) error {
 	// db.AutoMigrate(&models.UserDepartment{})
 	// db.AutoMigrate(&models.UserDesignation{})
 
-	//db.AutoMigrate(&models.UserDesignation{})
+	//db.AutoMigrate(&models.LevaeType{})
 
 	//database.DB.AutoMigrate(&models.User{}, &models.Post{})
 

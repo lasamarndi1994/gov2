@@ -97,6 +97,7 @@ func DataBaseValidationError(err error) *FieldErrorResponse {
 		"uni_users_employees_id":  "Employee ID already exists",
 		"uni_designations_name":   "Designations name is taken",
 		"uni_departments_name":    "Department name is taken",
+		"uni_levae_types_name":    "The leave is already taken",
 	}
 
 	for constraint, message := range constraintMap {
