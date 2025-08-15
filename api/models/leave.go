@@ -15,4 +15,7 @@ type Leave struct {
 	Remarks           string    `json:"remarks"`
 	Attachement       string    `json:"attachement"`
 	EmailNotification string    `gorm:"type:json"`
+	LeaveStatus       string    `json:"leave_status" gorm:"type:enum('Pending','Aprroved','Cancel')"`
+	CreatedAt         time.Time `json:"created_at"`
+	UpdatedAt         time.Time `json:"updated_at"`
 }

@@ -24,22 +24,22 @@ func ApplyLeave(c *gin.Context) {
 	userIDValue, _ := c.Get("userID")
 	form_date, _ := time.Parse("2006-01-02", input.FromDate)
 	to_date, _ := time.Parse("2006-01-02", input.ToDate)
-	emailJSON, _ := json.Marshal(input.EmailNotification)
+
+	jsonStr, _ := json.Marshal(input.EmailNotification)
+
 	var leave = models.Leave{
-		LeaveTypeId:    input.LeaveTypeId,
-		UserId:         userIDValue.(uint),
-		FromDate:       form_date,
-		ToDate:         to_date,
-		FromLeaveValue: input.FromLeaveValue,
-		ToLeaveValue:   input.ToLeaveValue,
-		Remarks:        input.Remarks,
-		//EmailNotification: json.Decoder(input.EmailNotification),
-		//	EmailNotification: []bytes emailJSON
+		LeaveTypeId:       input.LeaveTypeId,
+		UserId:            userIDValue.(uint),
+		FromDate:          form_date,
+		ToDate:            to_date,
+		FromLeaveValue:    input.FromLeaveValue,
+		ToLeaveValue:      input.ToLeaveValue,
+		Remarks:           input.Remarks,
+		EmailNotification: string(jsonStr),
 	}
 
 	err := database.DB.Create(&leave).Error
 	if err != nil {
-		//c.JSON(http.StatusUnprocessableEntity, gin.H{"errors": err.Error()})
 		c.JSON(http.StatusBadRequest, validation.DataBaseValidationError(err))
 		return
 	}
