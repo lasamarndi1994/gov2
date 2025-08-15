@@ -30,7 +30,6 @@ func ResponseData(message string, data interface{}) map[string]interface{} {
 }
 
 func ErrorMessage(filed string, message string) interface{} {
-
 	//errors := map[string]interface{}{}
 	var errors = map[string]string{
 		filed: message,
@@ -50,19 +49,4 @@ func SuccessResponse(data interface{}) interface{} {
 		Data:    &data,
 	}
 	return response
-}
-
-func DataBaseError(message string) interface{} {
-	// response := map[string]interface{}{}
-	// if strings.Contains(message, "Duplicate entry") {
-	// 	var filed string
-
-	// 	switch {
-	// 	case strings.Contains(message, "uni_users_email"):
-	// 		filed = "email"
-	// 	case strings.Contains(message, "uni_users_mobile_number"):
-	// 	}
-
-	// }
-	return message
 }
