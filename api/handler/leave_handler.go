@@ -8,12 +8,22 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/lasamarndi1994/gov2/api/models"
+	"github.com/lasamarndi1994/gov2/api/resource"
 	"github.com/lasamarndi1994/gov2/internal/database"
 	"github.com/lasamarndi1994/gov2/internal/request"
 	"github.com/lasamarndi1994/gov2/utility/response"
 	"github.com/lasamarndi1994/gov2/utility/validation"
+	"gorm.io/gorm"
 )
 
+func GetLeaveDetails(c *gin.Context) {
+	var leaves []models.Leave
+	database.DB.
+		Preload("LeaveType", func(tx *gorm.DB) *gorm.DB {
+			return tx.Select("id", "name")
+		}).Find(&leaves)
+	c.JSON(http.StatusOK, resource.FromLeaves(leaves))
+}
 func ApplyLeave(c *gin.Context) {
 	var input request.LeaveReuest
 
@@ -114,7 +124,7 @@ func CreateLeave(c *gin.Context) {
 		return
 	}
 
-	var leave = models.LevaeType{
+	var leave = models.LeaveType{
 		Name:   input.Name,
 		Status: input.Status,
 	}

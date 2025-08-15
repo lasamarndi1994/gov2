@@ -48,6 +48,7 @@ func SetupRouter() *gin.Engine {
 
 		//Leave
 		api.POST("/create-leave-type", handler.CreateLeave)
+		api.GET("/get-leave-details", handler.GetLeaveDetails)
 		api.POST("/apply-leave", handler.ApplyLeave)
 		api.PUT("/update-leave/:id", handler.UpdateLeave)
 		api.DELETE("delete-leave/:id", handler.DeleteLeave)
