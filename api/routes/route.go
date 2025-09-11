@@ -60,10 +60,10 @@ func SetupRouter() *gin.Engine {
 		api.DELETE("/delete-holiday/:id", handler.DeleteHoliday)
 
 		//salary
-		api.GET("/get-holidays", handler.GetHolidays)
-		// api.POST("/create-holiday", handler.CreateHoliday)
-		// api.PUT("/update-holiday/:id", handler.UpdateHoliday)
-		// api.DELETE("/delete-holiday/:id", handler.DeleteHoliday)
+		api.GET("/get-emp-salary", handler.GetSalary)
+		api.POST("/create-emp-slarly", handler.CreateSalary)
+		api.PUT("/update-emp-slarly/:id", handler.UpdateSalary)
+		api.DELETE("/delete-emp-slarly/:id", handler.DeleteSalary)
 
 	}
 	return router

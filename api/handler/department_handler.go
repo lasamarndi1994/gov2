@@ -24,7 +24,6 @@ func GetDepartments(c *gin.Context) {
 func CreateDepartment(c *gin.Context) {
 	var input DepartmentRequest
 	if err := c.ShouldBindBodyWithJSON(&input); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"erros": err})
 		errs := validation.FormatValidationError(err)
 		if errs != nil {
 			c.JSON(http.StatusUnprocessableEntity, gin.H{"erros": errs})
